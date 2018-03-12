@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head lang="en">
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.6/socket.io.js"></script>
+    <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script>
+      $(document).ready(function(){
+        var socket = io.connect("http://" + document.domain + ":" + location.port + "/mynamespace");
+        var arsQuestion = [
+          "은행을 선택해 주십시오.<br/>1: 우리은행<br/>2: 신한은행</br>3: 국민은행",
+          "계좌번호를 입력해 주십시오.",
+          "비밀번호를 입력해 주십시오.",
+          "정상처리 되었습니다."
+        ];
+        var step = 0;
+	socket.on('response', function(msg) {
+          if (msg.data != "Connected") {
+            if (msg.data == '10') {
+	      $("#ars").text("");
+              step++;
+              if (step > arsQuestion.length - 1) {
+                step = 0;
+	      }
+	      $("#sentence").text(arsQuestion[step])
+	    } else {
+              $("#ars").append(msg.data);
+	    }
+	  }  
+	});
+	$("#sentence").text(arsQuestion[step])
+      });
+    </script>
+  </head>
+  <body>
+    <div>"입력이 완료되면 *를 입력해 주세요"</div>
+    <div id="sentence" ></div>
+    <div id="ars" ></div>
+  </body>
+</html>
