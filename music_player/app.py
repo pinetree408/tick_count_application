@@ -1,5 +1,9 @@
+# -*- coding: utf-8 -*-
 import serial
 import requests
+import config
+import jaurim
+from youtube_api import YoutubeAPI
 
 cur_degree = 10
 cur_dir = 1
@@ -9,22 +13,10 @@ baseline = 11
 twomode = 12
 chunk = 13
 
-song_list_index = 0
-artist_list_index = 0
+song_list_index = -1
+album_list_index = -1
 
-music_list = [
-    'uw_HR9jIJww', 
-    '0FB2EoKTK_Q',
-    'vecSVX1QYbQ',
-    'MGos22_JM1U',
-    'JQGRg8XBnB4',
-    'v6_GwXU1lkg',
-    'e3dqgC1HK1k',
-    'SkN_hWI6n28',
-    '2NlNEj2mCIg',
-    'J_CFBjAyPWE',
-    'Y2V6yjjPbX0',
-]
+youtube = YoutubeAPI({'key': config.YOUTUBE_API})
 
 with serial.Serial('/dev/tty.usbmodem1411', 115200) as ser:
     ser.write(bytes(str(cur_degree) + ' ' + str(twomode)  + ' ' + str(cur_dir) + '\n'))
@@ -43,8 +35,15 @@ with serial.Serial('/dev/tty.usbmodem1411', 115200) as ser:
                     if index_finger == 1:
                         song_list_index = tick_count
                     elif middle_finger == 1:
-                        artist_list_index =  tick_count
+                        album_list_index =  tick_count / 5
 
                     if is_tap == 1:
-                        print 'confirm', tick_count
-                        requests.get('http://localhost:5000/play/' + music_list[tick_count])
+                        if album_list_index > 0 and song_list_index > 0:
+                            print album_list_index, song_list_index
+                            target = "자우림 " + str(album_list_index) + "집 " + str(jaurim.music_list[album_list_index-1][song_list_index-1])
+                            album_list_index = -1
+                            song_list_index = -1
+                            video_list = youtube.search_videos(target)
+                            video_id = video_list[0]['id']['videoId']
+                            print target
+                            requests.get('http://localhost:5000/play/' + video_id)

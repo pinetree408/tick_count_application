@@ -6,3 +6,9 @@ venv/
 
 # for python
 *.py[cod]
+
+# for music_player
+config.py
+
+# tmux
+*.log
