@@ -8,7 +8,8 @@
       $(document).ready(function(){
         var socket = io.connect("http://" + document.domain + ":" + location.port + "/mynamespace");
         var arsQuestion = [
-          "은행을 선택해 주십시오.<br/>1: 우리은행<br/>2: 신한은행</br>3: 국민은행",
+          "업무 시작을 원하는 경우 *를 입력해 주십시오",
+          "은행을 선택해 주십시오. 1: 우리은행 2: 신한은행 3: 국민은행",
           "계좌번호를 입력해 주십시오.",
           "비밀번호를 입력해 주십시오.",
           "정상처리 되었습니다."
@@ -22,14 +23,22 @@
               if (step > arsQuestion.length - 1) {
                 step = 0;
 	      }
-	      $("#sentence").text(arsQuestion[step])
+	      $("#sentence").text(arsQuestion[step]);
+              synthVoice(arsQuestion[step]);
 	    } else {
               $("#ars").append(msg.data);
 	    }
 	  }  
 	});
-	$("#sentence").text(arsQuestion[step])
+	$("#sentence").text(arsQuestion[step]);
       });
+
+      function synthVoice(text) {
+        const synth = window.speechSynthesis;
+        const utterance = new SpeechSynthesisUtterance();
+        utterance.text = text;
+        synth.speak(utterance);
+      }
     </script>
   </head>
   <body>

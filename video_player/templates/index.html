@@ -10,9 +10,15 @@
 	socket.on('response', function(msg) {
           if (msg.data != "Connected") {
             player.seekTo(Math.round(player.getCurrentTime()) + Number(msg.data), true);
+            simulateClick();
 	  }  
 	});
       });
+      function simulateClick() {
+        // var iframe = document.getElementById('player');
+        // var innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+        // var innnerPlayer = innerDoc.getElementById('player').getElementsByTagName('div')[0];
+      }
     </script>
   </head>
   <body>

@@ -13,6 +13,7 @@ pyserial==3.4
 python-engineio==2.0.3
 python-socketio==1.9.0
 requests==2.18.4
+selenium==3.11.0
 six==1.11.0
 urllib3==1.22
 Werkzeug==0.14.1
