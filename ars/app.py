@@ -22,7 +22,12 @@ with serial.Serial('/dev/tty.usbmodem1411', 115200) as ser:
                     middle_finger = int(data_list[2])
                     tick_count = int(data_list[3])
                     is_tap = int(data_list[5])
+                    tap_finger = int(data_list[6])
 
                     if is_tap == 1:
-                        print 'confirm', tick_count
-                        requests.get('http://localhost:5000/ars/' + str(tick_count))
+                        if tap_finger == 1:
+                            print 'confirm', tick_count
+                            requests.get('http://localhost:5000/ars/' + str(tick_count))
+                        else:
+                            print "delete"
+                            requests.get('http://localhost:5000/ars/' + str(-1))

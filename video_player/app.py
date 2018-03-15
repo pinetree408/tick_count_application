@@ -22,6 +22,8 @@ driver.switch_to.frame('player')
 marker = driver.find_element_by_class_name("ytp-scrubber-container")
 
 start_flag = False
+
+init_position = 0
 prev_tick = -1;
 
 with serial.Serial('/dev/tty.usbmodem1411', 115200) as ser:
@@ -38,20 +40,23 @@ with serial.Serial('/dev/tty.usbmodem1411', 115200) as ser:
                     tick_count = int(data_list[3])
                     is_tap = int(data_list[5])
 
-                    print index_finger, middle_finger, tick_count
                     if index_finger == 1:
                         if tick_count == 0:
                             if start_flag == False:
                                 start_flag = True
+                                init_position = marker.location['x']
                                 ActionChains(driver).click_and_hold(marker).perform()
                         else:
                             if start_flag == True:
                                 if prev_tick != tick_count:
-                                    ActionChains(driver).move_by_offset(tick_count * second_unit, 0).perform()
+                                    new_position = init_position + (tick_count * second_unit) - marker.location['x']
+                                    ActionChains(driver).move_by_offset(new_position, 0).perform()
                                 prev_tick = tick_count
-                    else:
+                    if is_tap == 1:
                         if start_flag == True:
                             start_flag = False
+                            init_poisition = 0
+                            prev_tick = -1
                             ActionChains(driver).release(marker).perform()
 
 driver.switch_to.default_content()

@@ -8,10 +8,10 @@
       $(document).ready(function(){
         var socket = io.connect("http://" + document.domain + ":" + location.port + "/mynamespace");
         var arsQuestion = [
-          "업무 시작을 원하는 경우 *를 입력해 주십시오",
+          "업무 시작을 원하는 경우 우물정을 입력해 주십시오",
           "은행을 선택해 주십시오. 1: 우리은행 2: 신한은행 3: 국민은행",
-          "계좌번호를 입력해 주십시오.",
-          "비밀번호를 입력해 주십시오.",
+          "생년월일을 6자리로 입력해 주십시오.",
+          "비밀번호 4자리를 입력해 주십시오.",
           "정상처리 되었습니다."
         ];
         var step = 0;
@@ -25,6 +25,9 @@
 	      }
 	      $("#sentence").text(arsQuestion[step]);
               synthVoice(arsQuestion[step]);
+	    } else if (msg.data == '-1') {
+              var prevInputted = $("#ars").text();
+              $("#ars").text(prevInputted.slice(0, prevInputted.length - 1));
 	    } else {
               $("#ars").append(msg.data);
 	    }
@@ -42,7 +45,7 @@
     </script>
   </head>
   <body>
-    <div>"입력이 완료되면 *를 입력해 주세요"</div>
+    <div>"입력이 완료되면 우물정을 입력해 주세요"</div>
     <div id="sentence" ></div>
     <div id="ars" ></div>
   </body>

@@ -30,12 +30,13 @@ with serial.Serial('/dev/tty.usbmodem1411', 115200) as ser:
                     index_finger = int(data_list[1])
                     middle_finger = int(data_list[2])
                     tick_count = int(data_list[3])
+                    tick_count_middle = int(data_list[4])
                     is_tap = int(data_list[5])
 
                     if index_finger == 1:
                         song_list_index = tick_count
                     elif middle_finger == 1:
-                        album_list_index =  tick_count / 5
+                        album_list_index =  tick_count_middle
 
                     if is_tap == 1:
                         if album_list_index > 0 and song_list_index > 0:
