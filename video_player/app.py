@@ -12,13 +12,18 @@ baseline = 11
 twomode = 12
 chunk = 13
 
+duration = 252.0
 
-second_unit = 616.0 / 252 
 
 driver = webdriver.Chrome(executable_path=r"./chromedriver")
 driver.get('http://localhost:5000/')
 
 driver.switch_to.frame('player')
+slider = driver.find_element_by_class_name("ytp-progress-bar")
+slider_width = slider.size['width']
+
+second_unit = slider_width / duration
+
 marker = driver.find_element_by_class_name("ytp-scrubber-container")
 
 start_flag = False
