@@ -8,11 +8,22 @@
       $(document).ready(function(){
         var socket = io.connect("http://" + document.domain + ":" + location.port + "/mynamespace");
 	socket.on('response', function(msg) {
-          if (msg.data != "Connected") {
-            player.loadVideoById(msg.data);
+          if (msg.type != "System") {
+            if (msg.type == "Play") {
+              player.loadVideoById(msg.data);
+	    } else if (msg.type == "Select") {
+              synthVoice(msg.data + "집");
+	    }
 	  }  
 	});
       });
+
+      function synthVoice(text) {
+        const synth = window.speechSynthesis;
+        const utterance = new SpeechSynthesisUtterance();
+        utterance.text = text;
+        synth.speak(utterance);
+      }
     </script>
   </head>
   <body>

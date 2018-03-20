@@ -13,8 +13,8 @@ baseline = 11
 twomode = 12
 chunk = 13
 
-song_list_index = -1
-album_list_index = -1
+song_list_index = 0
+album_list_index = 0
 
 youtube = YoutubeAPI({'key': config.YOUTUBE_API})
 
@@ -40,7 +40,6 @@ with serial.Serial('/dev/tty.usbmodem1411', 115200) as ser:
 
                     if is_tap == 1:
                         if album_list_index > 0 and song_list_index > 0:
-                            print album_list_index, song_list_index
                             target = "자우림 " + str(album_list_index) + "집 " + str(jaurim.music_list[album_list_index-1][song_list_index-1])
                             album_list_index = -1
                             song_list_index = -1
@@ -48,3 +47,7 @@ with serial.Serial('/dev/tty.usbmodem1411', 115200) as ser:
                             video_id = video_list[0]['id']['videoId']
                             print target
                             requests.get('http://localhost:5000/play/' + video_id)
+                            album_list_index = 0
+                            song_list_index = 0
+                        elif album_list_index > 0 and song_list_index == 0:
+                            requests.get('http://localhost:5000/select/' + str(album_list_index))

@@ -26,9 +26,11 @@
 	      $("#sentence").text(arsQuestion[step]);
               synthVoice(arsQuestion[step]);
 	    } else if (msg.data == '-1') {
+              synthVoice("취소");
               var prevInputted = $("#ars").text();
               $("#ars").text(prevInputted.slice(0, prevInputted.length - 1));
 	    } else {
+              synthVoice(msg.data);
               $("#ars").append(msg.data);
 	    }
 	  }  

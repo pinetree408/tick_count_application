@@ -16,12 +16,24 @@ def index():
 @app.route('/play/<song>')
 def play(song):
     socketio.emit("response", {
-        'type': 'System',
+        'type': 'Play',
         'data': song,
         },
         namespace='/mynamespace',
         broadcast=True)  
     return 'Get Song'
+
+
+@app.route('/select/<album>')
+def select(album):
+    socketio.emit("response", {
+        'type': 'Select',
+        'data': album,
+        },
+        namespace='/mynamespace',
+        broadcast=True)  
+    return 'Get Song'
+
 
 
 @socketio.on('connect', namespace='/mynamespace')

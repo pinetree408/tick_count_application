@@ -2,27 +2,11 @@
 <html>
   <head lang="en">
     <meta charset="UTF-8">
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.6/socket.io.js"></script>
-    <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script>
-      $(document).ready(function(){
-        var socket = io.connect("http://" + document.domain + ":" + location.port + "/mynamespace");
-	socket.on('response', function(msg) {
-          if (msg.data != "Connected") {
-            player.seekTo(Math.round(player.getCurrentTime()) + Number(msg.data), true);
-            simulateClick();
-	  }  
-	});
-      });
-      function simulateClick() {
-        // var iframe = document.getElementById('player');
-        // var innerDoc = iframe.contentDocument || iframe.contentWindow.document;
-        // var innnerPlayer = innerDoc.getElementById('player').getElementsByTagName('div')[0];
-      }
-    </script>
   </head>
   <body>
-    <div id="player"></div>
+    <div class="player-container">
+      <div id="player"></div>
+    </div>
     <script>
       var tag = document.createElement('script');
       tag.src = "https://www.youtube.com/iframe_api";
@@ -32,9 +16,8 @@
       var player;
       function onYouTubeIframeAPIReady() {
         player = new YT.Player('player', {
-          height: '360',
-          width: '640',
-          videoId: 'wAhGlIa_Zw4',
+          width: '100%',
+          videoId: 'n1T9VPG4st0',
           origin: 'http://localhost:5000/',
           events: {
             'onReady': onPlayerReady,

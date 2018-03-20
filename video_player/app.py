@@ -12,17 +12,15 @@ baseline = 11
 twomode = 12
 chunk = 13
 
-duration = 252.0
-
-
 driver = webdriver.Chrome(executable_path=r"./chromedriver")
+driver.set_window_position(0, 0)
+driver.set_window_size(375, 667)
+
 driver.get('http://localhost:5000/')
 
 driver.switch_to.frame('player')
 slider = driver.find_element_by_class_name("ytp-progress-bar")
 slider_width = slider.size['width']
-
-second_unit = slider_width / duration
 
 marker = driver.find_element_by_class_name("ytp-scrubber-container")
 
@@ -54,7 +52,7 @@ with serial.Serial('/dev/tty.usbmodem1411', 115200) as ser:
                         else:
                             if start_flag == True:
                                 if prev_tick != tick_count:
-                                    new_position = init_position + (tick_count * second_unit) - marker.location['x']
+                                    new_position = init_position + (tick_count * 3) - marker.location['x']
                                     ActionChains(driver).move_by_offset(new_position, 0).perform()
                                 prev_tick = tick_count
                     if is_tap == 1:
