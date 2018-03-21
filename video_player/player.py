@@ -15,7 +15,7 @@ def index():
 @app.route('/seek/<seconds>')
 def seek(seconds):
     socketio.emit("response", {
-        'type': 'System',
+        'type': 'Seek',
         'data': seconds,
         },
         namespace='/mynamespace',
