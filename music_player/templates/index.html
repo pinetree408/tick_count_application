@@ -12,9 +12,13 @@
             if (msg.type == "Play") {
               player.loadVideoById(msg.data);
 	    } else if (msg.type == "Select") {
-              synthVoice(msg.data + "집");
+            setTimeout(
+              function() {
+                synthVoice(msg.data + "집");
+              }, 1000,
+            );
 	    }
-	  }  
+	  }
 	});
       });
 

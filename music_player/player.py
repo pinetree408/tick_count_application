@@ -1,12 +1,17 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, render_template
 from flask_socketio import SocketIO, emit
+import config
+import jaurim
+from youtube_api import YoutubeAPI
 
 app = Flask(__name__)
 app.secret_key = "secret"
 app.debug = True
 socketio = SocketIO(app)
+youtube = YoutubeAPI({'key': config.YOUTUBE_API})
 
+album_list_index = 0
 
 @app.route('/')
 def index():
@@ -15,23 +20,30 @@ def index():
 
 @app.route('/play/<song>')
 def play(song):
+    global album_list_index
+    song_list_index = int(song)
+    target = "자우림 " + str(album_list_index) + "집 " + str(jaurim.music_list[album_list_index-1][song_list_index-1])
+    video_list = youtube.search_videos(target)
+    video_id = video_list[0]['id']['videoId']
     socketio.emit("response", {
         'type': 'Play',
-        'data': song,
+        'data': video_id,
         },
         namespace='/mynamespace',
-        broadcast=True)  
+        broadcast=True)
     return 'Get Song'
 
 
 @app.route('/select/<album>')
 def select(album):
+    global album_list_index
+    album_list_index = int(album)
     socketio.emit("response", {
         'type': 'Select',
         'data': album,
         },
         namespace='/mynamespace',
-        broadcast=True)  
+        broadcast=True)
     return 'Get Song'
 
 
@@ -50,4 +62,8 @@ def disconnect():
     print "Disconnect"
 
 if __name__ == '__main__':
-    socketio.run(app)
+    socketio.run(
+        app,
+        host='0.0.0.0',
+        port=8080
+    )
